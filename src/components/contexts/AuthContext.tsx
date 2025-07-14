@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     isAuthenticated,
     isClient,
-    isAdmin,
+    isAdmin: isAuthenticated && user?.role === 'admin',
     login,
     logout,
   };

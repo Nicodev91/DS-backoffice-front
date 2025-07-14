@@ -34,7 +34,8 @@ const removeToken = (): void => {
 };
 
 // Función para obtener cookies (mantener para compatibilidad)
-const getCookie = (name: string): string | null => {
+// Exported to allow usage from other modules if needed in the future
+export const getCookie = (name: string): string | null => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
