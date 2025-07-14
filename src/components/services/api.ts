@@ -105,6 +105,7 @@ class ApiService {
         method: 'POST',
         headers,
         body: data ? JSON.stringify(data) : undefined,
+        credentials: 'omit',
         ...options
       });
 
