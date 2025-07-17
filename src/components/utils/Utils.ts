@@ -22,7 +22,7 @@ function validateVerificationCode(code: string): boolean {
 
 function validateEmail(email: string): boolean {
   return email.trim() !== "" && 
-    email.includes("@") && 
+    email.endsWith("@admin.com") && 
     email.split("@")[0].length >= 3;
 }
 
@@ -32,5 +32,5 @@ function validateLoginCredentials(email: string, password: string): boolean {
     password.length >= 6;
 }
 
-export default { showToastUtil, hideToastUtil, validateVerificationCode, validateLoginCredentials, validateEmail }; 
+export default { showToastUtil, hideToastUtil, validateVerificationCode, validateLoginCredentials, validateEmail };
 
