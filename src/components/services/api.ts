@@ -105,7 +105,8 @@ class ApiService {
         method: 'POST',
         headers,
         body: data ? JSON.stringify(data) : undefined,
-        credentials: 'omit',
+        // Usar la configuración CORS global en lugar de 'omit'
+        ...API_CONFIG.CORS_CONFIG,
         ...options
       });
 
@@ -194,4 +195,4 @@ class ApiService {
 // Instancia singleton del servicio de API
 const apiService = new ApiService();
 
-export default apiService; 
+export default apiService;
