@@ -1,7 +1,7 @@
 // Configuración de la API
 export const API_CONFIG = {
   // URL base de la API
-  BASE_URL: import.meta.env.VITE_API_URL || 'https://ds-backend-proyect.vercel.app/v1',
+  BASE_URL: import.meta.env.VITE_API_URL || 'https://ds-backend-proyect.vercel.app',
   
   // Timeout por defecto para las peticiones (10 segundos)
   TIMEOUT: 10000,

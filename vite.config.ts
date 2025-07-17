@@ -11,7 +11,7 @@ export default defineConfig({
         target: 'https://ds-backend-proyect.vercel.app',
         changeOrigin: true,
         secure: true,
-        rewrite: (path) => path.replace(/^\/api/, '/v1')
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   },
