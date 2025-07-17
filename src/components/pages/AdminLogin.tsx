@@ -152,7 +152,7 @@ const AdminLogin = () => {
               <ButtonComponent 
                 type="submit" 
                 disabled={!isLoginValid || isLoginLoading}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded mt-4"
+                className={`${isLoginValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 hover:bg-gray-600'} text-white font-medium py-2 px-4 rounded mt-4`}
               >
                 {isLoginLoading ? "Iniciando sesión..." : "Acceder como Admin"}
               </ButtonComponent>
