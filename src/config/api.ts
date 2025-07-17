@@ -14,7 +14,11 @@ export const API_CONFIG = {
   
   // Configuración de CORS
   CORS_CONFIG: {
-    credentials: 'include' as const,
+    // Configuración de CORS
+    CORS_CONFIG: {
+      credentials: 'omit', // Cambiar temporalmente
+      mode: 'cors' as const,
+    },
     mode: 'cors' as const,
   },
   
