@@ -16,7 +16,7 @@ export default defineConfig({
     }
   },
   define: {
-    // Usar un valor por defecto sin intentar acceder a import.meta.env
-    'import.meta.env.VITE_API_URL': JSON.stringify('https://backend-data-sentinel.vercel.app/v1')
+    // Corregir para que coincida con tu backend real
+    'import.meta.env.VITE_API_URL': JSON.stringify('https://ds-backend-proyect.vercel.app/v1')
   }
 })
