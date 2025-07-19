@@ -71,12 +71,33 @@ function AddStock() {
           setCategories(response);
         } else {
           console.error("La respuesta de categorías no es un array:", response);
-          setCategoryError("Formato de respuesta incorrecto");
-          setCategories([]);
+          console.log("Usando categorías estáticas como fallback");
+          
+          // Usar categorías estáticas como fallback
+          const staticCategories: Category[] = [
+            { categoryId: 1, name: "Bebidas", description: "Bebidas y refrescos" },
+            { categoryId: 2, name: "Limpieza", description: "Productos de limpieza" },
+            { categoryId: 3, name: "Alimentos", description: "Productos alimenticios" },
+            { categoryId: 4, name: "Hogar", description: "Artículos para el hogar" },
+            { categoryId: 5, name: "Electrónica", description: "Productos electrónicos" }
+          ];
+          
+          setCategories(staticCategories);
         }
       } catch (error) {
         console.error("Error al cargar categorías:", error);
-        setCategoryError("No se pudieron cargar las categorías. Verifica tu conexión.");
+        setCategoryError("No se pudieron cargar las categorías. Usando categorías predefinidas.");
+        
+        // Usar categorías estáticas en caso de error
+        const staticCategories: Category[] = [
+          { categoryId: 1, name: "Bebidas", description: "Bebidas y refrescos" },
+          { categoryId: 2, name: "Limpieza", description: "Productos de limpieza" },
+          { categoryId: 3, name: "Alimentos", description: "Productos alimenticios" },
+          { categoryId: 4, name: "Hogar", description: "Artículos para el hogar" },
+          { categoryId: 5, name: "Electrónica", description: "Productos electrónicos" }
+        ];
+        
+        setCategories(staticCategories);
       } finally {
         setIsLoadingCategories(false);
       }
