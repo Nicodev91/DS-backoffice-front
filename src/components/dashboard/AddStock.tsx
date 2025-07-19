@@ -216,13 +216,13 @@ function AddStock() {
         // Calcular el nuevo stock según la operación
         let nuevoStock;
         if (formData.operacion === "agregar") {
-          nuevoStock = (productoActual.stock || 0) + cantidad;
+          nuevoStock = cantidad;
         } else {
-          nuevoStock = (productoActual.stock || 0) - cantidad;
           // Validar que el stock no quede negativo
-          if (nuevoStock < 0) {
+          if ((productoActual.stock || 0) < cantidad) {
             throw new Error("No hay suficiente stock para realizar esta operación");
           }
+          nuevoStock = (productoActual.stock || 0) - cantidad;
         }
         
         // Actualizar el stock del producto usando el endpoint PATCH
