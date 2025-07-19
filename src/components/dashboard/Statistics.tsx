@@ -3,6 +3,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   AreaChart, Area
 } from 'recharts';
+import apiService from '../services/api';
+import { API_CONFIG } from '../../config/api';
 
 // Datos de ejemplo - Reemplazar con datos reales de tu API
 const dummyOrdersData = [
@@ -35,24 +37,56 @@ interface SalesData {
   sales: number;
 }
 
+interface Order {
+  orderId: number;
+  rut: string;
+  orderDate: string;
+  totalAmount: string;
+  status: string;
+  shippingAddress: string;
+  userId: number;
+  customer: {
+    rut: string;
+    name: string;
+    email: string | null;
+  };
+  orderDetails: Array<{
+    orderDetailId: number;
+    orderId: number;
+    productId: number;
+    quantity: number;
+    unitPrice: string;
+    subtotal: string;
+    product: {
+      productId: number;
+      name: string;
+      imageUrl: string;
+      price: string;
+    };
+  }>;
+}
+
 const Statistics = () => {
-  const [ordersData] = useState<OrderData[]>(dummyOrdersData);
-  const [salesData] = useState<SalesData[]>(dummySalesData);
+  const [ordersData, setOrdersData] = useState<OrderData[]>(dummyOrdersData);
+  const [salesData, setSalesData] = useState<SalesData[]>(dummySalesData);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Aquí puedes hacer la llamada a tu API para obtener los datos reales
+    // Función para obtener los datos reales de la API
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Ejemplo de llamada a API (comentado hasta tener el endpoint real)
-        // const response = await fetch('tu-endpoint-api/pedidos');
-        // const data = await response.json();
-        // Procesar datos y actualizar el estado
-        // setOrdersData(data.orders);
-        // setSalesData(data.sales);
+        // Obtener los pedidos desde la API
+        const response = await apiService.get<{orders: Order[]}>(API_CONFIG.ENDPOINTS.ORDERS.GET_ALL);
+        const orders = response.orders || [];
         
-        // Por ahora usamos los datos de ejemplo
+        // Procesar los datos para los últimos 7 días
+        const last7Days = getLastSevenDays();
+        const processedOrdersData = processOrdersData(orders, last7Days);
+        const processedSalesData = processSalesData(orders, last7Days);
+        
+        setOrdersData(processedOrdersData);
+        setSalesData(processedSalesData);
         setLoading(false);
       } catch (error) {
         console.error('Error al cargar datos de estadísticas:', error);
@@ -62,6 +96,62 @@ const Statistics = () => {
 
     fetchData();
   }, []);
+
+  // Función para obtener los últimos 7 días
+  const getLastSevenDays = () => {
+    const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const result = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dayName = days[date.getDay()];
+      result.push({
+        date: date,
+        dayName: dayName,
+        formattedDate: date.toISOString().split('T')[0] // formato YYYY-MM-DD
+      });
+    }
+    
+    return result;
+  };
+
+  // Función para procesar los datos de cantidad de pedidos
+  const processOrdersData = (orders: Order[], days: any[]): OrderData[] => {
+    return days.map(day => {
+      // Filtrar pedidos para este día
+      const dayOrders = orders.filter(order => {
+        const orderDate = new Date(order.orderDate).toISOString().split('T')[0];
+        return orderDate === day.formattedDate;
+      });
+      
+      return {
+        day: day.dayName,
+        orders: dayOrders.length
+      };
+    });
+  };
+
+  // Función para procesar los datos de ventas totales
+  const processSalesData = (orders: Order[], days: any[]): SalesData[] => {
+    return days.map(day => {
+      // Filtrar pedidos para este día
+      const dayOrders = orders.filter(order => {
+        const orderDate = new Date(order.orderDate).toISOString().split('T')[0];
+        return orderDate === day.formattedDate;
+      });
+      
+      // Sumar los montos totales
+      const totalSales = dayOrders.reduce((sum, order) => {
+        return sum + parseFloat(order.totalAmount);
+      }, 0);
+      
+      return {
+        day: day.dayName,
+        sales: parseFloat(totalSales.toFixed(2))
+      };
+    });
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-64">Cargando estadísticas...</div>;
