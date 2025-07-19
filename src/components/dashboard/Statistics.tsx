@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  LineChart, Line, AreaChart, Area
+  AreaChart, Area
 } from 'recharts';
 
 // Datos de ejemplo - Reemplazar con datos reales de tu API
@@ -36,8 +36,8 @@ interface SalesData {
 }
 
 const Statistics = () => {
-  const [ordersData, setOrdersData] = useState<OrderData[]>(dummyOrdersData);
-  const [salesData, setSalesData] = useState<SalesData[]>(dummySalesData);
+  const [ordersData] = useState<OrderData[]>(dummyOrdersData);
+  const [salesData] = useState<SalesData[]>(dummySalesData);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
