@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Statistics from "./Statistics"; // Importar el componente de estadísticas
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -142,8 +143,11 @@ function Dashboard() {
           </div>
         </div>
 
+        {/* Componente de Estadísticas */}
+        <Statistics />
+
         {/* Espacio para contenido adicional */}
-        <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+        <div className="bg-white rounded-lg shadow p-4 lg:p-6 mt-6">
           <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900">
             Actividad Reciente
           </h2>
