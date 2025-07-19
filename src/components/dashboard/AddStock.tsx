@@ -213,23 +213,22 @@ function AddStock() {
         const productoActual = await apiService.get(`/products/${productoId}`);
         console.log("Producto actual:", productoActual);
         
-        // Calcular el nuevo stock según la operación
-        let nuevoStock;
-        if (formData.operacion === "agregar") {
-          nuevoStock = cantidad;
-        } else {
-          // Validar que el stock no quede negativo
-          if ((productoActual.stock || 0) < cantidad) {
-            throw new Error("No hay suficiente stock para realizar esta operación");
-          }
-          nuevoStock = (productoActual.stock || 0) - cantidad;
+        // Verificar si hay suficiente stock para restar
+        if (formData.operacion === "restar" && (productoActual.stock || 0) < cantidad) {
+          throw new Error("No hay suficiente stock para realizar esta operación");
         }
         
+        // Enviar solo la cantidad a incrementar/decrementar
+        const stockData = {
+          cantidad: formData.operacion === "agregar" ? cantidad : -cantidad
+        };
+        
+        console.log("Datos de actualización de stock:", stockData);
+        
         // Actualizar el stock del producto usando el endpoint PATCH
-        const response = await apiService.patch(`/products/${productoId}`, {
-          stock: nuevoStock
-        });
-            console.log("Respuesta de actualización de stock:", response);
+        // Enviamos solo la cantidad a incrementar/decrementar
+        const response = await apiService.patch(`/products/${productoId}/stock`, stockData);
+        console.log("Respuesta de actualización de stock:", response);
         
         // Mostrar mensaje de éxito con información del nuevo stock
         setFormMessage({ 
