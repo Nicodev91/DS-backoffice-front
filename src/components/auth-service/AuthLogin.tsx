@@ -96,8 +96,9 @@ class SecureAuthService {
         console.log('Rol final asignado:', user.role);
         console.log('Estructura completa de data:', JSON.stringify(data, null, 2));
         
-        // Almacenar información del usuario en sessionStorage
-        sessionStorage.setItem('user', JSON.stringify(user));
+        // Línea 95-96: Cambiar sessionStorage por localStorage
+        // Almacenar información del usuario en localStorage en lugar de sessionStorage
+        localStorage.setItem('user', JSON.stringify(user));
         
         console.log("Login exitoso, token almacenado");
         console.log("Usuario creado:", user);
@@ -132,13 +133,13 @@ class SecureAuthService {
     }
   }
 
+  // Línea 136-137: Actualizar el método clearLocalData
   private clearLocalData(): void {
     // Limpiar localStorage
     removeToken();
     localStorage.removeItem('refresh_token');
     
-    // Limpiar sessionStorage
-    sessionStorage.removeItem('user');
+    // Limpiar localStorage (no sessionStorage)
     localStorage.removeItem('user');
     
     console.log("Datos locales limpiados");
@@ -148,9 +149,10 @@ class SecureAuthService {
     return !!getTokenFromStorage();
   }
 
+  // Línea 142-150: Actualizar el método getUser para priorizar localStorage
   getUser(): any {
     try {
-      const userStr = sessionStorage.getItem('user') || localStorage.getItem('user');
+      const userStr = localStorage.getItem('user');
       console.log('AuthService - getUser - userStr:', userStr);
       const user = userStr ? JSON.parse(userStr) : null;
       console.log('AuthService - getUser - usuario parseado:', user);
